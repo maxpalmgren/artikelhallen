@@ -1,0 +1,30 @@
+﻿@using Umbraco.Cms.Web.Common.PublishedModels;
+@inherits Umbraco.Cms.Web.Common.Views.UmbracoViewPage<ContentModels.Home>
+@using ContentModels = Umbraco.Cms.Web.Common.PublishedModels;
+
+@{
+	Layout = "Master.cshtml";
+}
+
+<h1 class="mb-3">Top Stories Right Now</h1>
+@{
+	var selection = Umbraco.Content(Guid.Parse("8574f551-8752-4e9d-8e61-3527205b568d"))
+    .DescendantsOfType("generalArticle")
+    .Where(x => x.IsVisible())
+    .OrderByDescending(x => x.CreateDate);
+}
+	@foreach (var item in selection)
+	{
+	var image = item.Value<IPublishedContent>("articleLeadImage");
+	<div class="card-group mb-3">
+  <div class="card">
+    <img class="card-img-top" src="@image.Url()" alt="Card image cap">
+    <div class="card-body">
+      <h5 class="card-title">@item.Name()</h5>
+      <p class="card-text">@item.Value("articleContent")</p>
+    </div>
+  </div>
+</div>
+	}
+
+
